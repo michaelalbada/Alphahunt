@@ -97,7 +97,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 **2. Clone and setup**
 ```bash
-git clone <repository-url>
+git clone https://github.com/microsoft/Alphahunt
 cd Alphahunt
 uv sync
 ```
