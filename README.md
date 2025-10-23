@@ -1,30 +1,53 @@
-# AlphaHunt: Synthetic Environment Builder
- 
-### The Synthetic Environment Builder is a tool designed to generate high-quality synthetic data at scale for cybersecurity applications. It simulates digital environments by creating synthetic companies, entities (users, processes, devices), and realistic logs. This data can be used to train reinforcement learning models for tasks like incident investigation, threat hunting, and detecting vulnerabilities.
+# 🎯 AlphaHunt: Synthetic Environment Builder
 
-## Table of Contents
- 
-Project Structure
-Prerequisites
-Installation
-Usage
-Running the Environment Builder
-Running Unit Tests
-Configuration
-Customization and Extension
-Troubleshooting
-Contributing
+> Generate high-quality synthetic cybersecurity data at scale for training reinforcement learning models in incident investigation, threat hunting, and vulnerability detection.
 
-## Project Structure
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/badge/uv-package%20manager-orange)](https://github.com/astral-sh/uv)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-project-root/
-├── config/                             # YAML files that describe scenarios
-│   └── *.yaml
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Quick Start](#-quick-start)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Testing](#-testing)
+- [Development](#-development)
+- [Customization](#-customization)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+
+## 🔍 Overview
+
+AlphaHunt simulates realistic digital environments by creating:
+- **Synthetic companies** with organizational structures
+- **Entities** including users, processes, and devices
+- **Realistic security logs** for training ML models
+- **Attack scenarios** across the MITRE ATT&CK framework
+
+## ✨ Features
+
+- 🏢 **Synthetic Company Generation** - Create realistic organizational profiles
+- 👥 **Entity Simulation** - Generate users, devices, and processes with relationships
+- 📊 **Security Log Generation** - Produce realistic event logs at scale
+- 🎭 **Attack Simulation** - Implement full attack chains from reconnaissance to impact
+- 🔧 **Highly Configurable** - YAML-based scenario configuration
+- ⚡ **Fast & Modern** - Built with uv for lightning-fast dependency management
+
+## 📁 Project Structure
+```
+Alphahunt/
+├── config/                          # YAML scenario configurations
+│   ├── environment_config.yaml
+│   └── *.yaml                       # Attack chain scenarios
 │
 ├── src/
-│   ├── attack_simulation/               # end-to-end attack simulator
-│   │   ├── components/                  # atomic generators & helpers
-│   │   │   ├── Benign / benign.py
+│   ├── attack_simulation/           # Attack simulation engine
+│   │   ├── components/              # MITRE ATT&CK technique implementations
+│   │   │   ├── Benign/
 │   │   │   ├── Reconnaissance/
 │   │   │   ├── InitialAccess/
 │   │   │   ├── CredentialAccess/
@@ -35,143 +58,297 @@ project-root/
 │   │   │   ├── Exfiltration/
 │   │   │   ├── Impact/
 │   │   │   └── Persistence/
-│   │   │
-│   │   └── scenarios/                    # KC7 / SimuLand mapping utilities
+│   │   └── scenarios/               # KC7 / SimuLand mappings
 │   │
-│   ├── data_generation/                 # Defender-XDR schema & builders
-│   │   ├── simulator.py                 # CLI entry-point for bulk generation
-│   │   ├── environment_builder.py
-│   │   └── defender_xdr/ …              # schema-specific generators
+│   ├── data_generation/             # Defender-XDR schema builders
+│   │   ├── simulator.py             # CLI entry point
+│   │   ├── environment_builder.py   # Core environment builder
+│   │   └── defender_xdr/            # Schema-specific generators
 │   │
-│   └── utils/
+│   └── utils/                       # Utilities
 │       ├── logging_utils.py
 │       ├── config_utils.py
-│       └── pydantic_models/             # common Pydantic schemas
+│       └── pydantic_models/         # Data models
 │
-├── tests/                               # unit / integration tests
-│   ├── __init__.py
-│   └── test_*.py                        # e.g. test_attack_steps.py
-│
-└── README.md                            # high-level documentation
- 
-## ☝️ Installation
+├── tests/                           # Unit and integration tests
+├── pyproject.toml                   # Project dependencies
+├── uv.lock                          # Locked versions
+└── .python-version                  # Python version pin
+```
 
-0. Install uv
+## 🚀 Quick Start
 
-`curl -LsSf https://astral.sh/uv/install.sh | sh`
-`source $HOME/.cargo/env`
+### Prerequisites
 
-1. Set up the enviornment
+- **Python 3.10+** (managed automatically by uv)
+- **uv** package manager
 
-    uv sync
+### Installation
 
-## 🧪 Usage
+**1. Install uv**
+```bash
+# Linux/WSL/macOS
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.cargo/env
 
-To generate synthetic data for each of the attack chains available simply run:
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
 
-`uv run python src/generate_data.py`
+**2. Clone and setup**
+```bash
+git clone <repository-url>
+cd Alphahunt
+uv sync
+```
 
-To generate data for a specific attack chain, just specify the file under configs:
+That's it! 🎉 The `uv sync` command automatically:
+- Creates a virtual environment in `.venv/`
+- Installs all dependencies from `uv.lock`
+- Sets up the correct Python version
 
-`uv run python src/generate_data.py --config config/initial_access_malware_to_ransomware.yaml`
+## 💻 Usage
 
-This script:
+### Generate All Attack Chains
+```bash
+uv run python src/generate_data.py
+```
 
-Creates a synthetic company profile.
-Generates entities such as users, processes, and devices.
-Simulates logs of activities within the environment.
-Prints samples of the generated data to the console.
+### Generate Specific Attack Chain
+```bash
+uv run python src/generate_data.py --config config/initial_access_malware_to_ransomware.yaml
+```
 
-## Running Tests
+### What It Does
 
-Option 1: Using unittest Discovery
- 
-Run all tests in the tests/ directory:
+The generator:
+1. ✅ Creates a synthetic company profile with org structure
+2. ✅ Generates entities (users, processes, devices) with relationships
+3. ✅ Simulates realistic activity logs over time
+4. ✅ Outputs data samples to console (or saves to file)
 
+## ⚙️ Configuration
 
-python -m unittest discover -s tests  
- 
+Configure scenarios using YAML files in `config/`:
+```yaml
+# config/environment_config.yaml
+num_entities_range: [50, 150]    # Entity count range
+num_logs_range: [500, 2000]      # Log event count range
+simulation_days: 15              # Simulation duration
+```
 
-Option 2: Running a Specific Test Module
- 
-Run the test_environment_builder.py module:
+### Available Scenarios
 
+- `initial_access_malware_to_ransomware.yaml` - Ransomware attack chain
+- Add more scenarios in `config/` following the same structure
 
-python -m unittest tests.test_environment_builder  
- 
+## 🧪 Testing
 
-Option 3: Directly Running the Test Script
- 
-Execute the test script directly:
+### Run All Tests
+```bash
+uv run python -m unittest discover -s tests
+```
 
+### Run Specific Test Module
+```bash
+uv run python -m unittest tests.test_environment_builder
+```
 
-python tests/test_environment_builder.py  
- 
+### Run With Pytest (if installed)
+```bash
+uv add --dev pytest
+uv run pytest tests/ -v
+```
 
-## Configuration
- 
-The environment builder can be customized using a configuration file. The default likes under config/environment_config.yaml.
+## 🛠️ Development
 
+### Adding Dependencies
+```bash
+# Production dependency
+uv add numpy pandas
 
-num_entities_range: [50, 150]    # Range for the number of entities to generate  
-num_logs_range: [500, 2000]      # Range for the number of logs to generate  
-simulation_days: 15              # Number of days to simulate  
- 
-The script will use default settings if the configuration file is not provided or if specific settings are missing.
+# Development dependency  
+uv add --dev pytest black ruff
 
+# With version constraint
+uv add "requests>=2.31.0"
+```
 
-## Integrate with Language Models (LLMs)
- 
-The current implementation uses mock data for generating company profiles and other attributes. To generate more realistic and varied data, you can integrate a Language Model (e.g., OpenAI's GPT-3 or GPT-4).
+### Updating Dependencies
+```bash
+# Update all packages
+uv lock --upgrade
 
-Modify the LLM class in environment_builder.py:
+# Update specific package
+uv add package-name --upgrade
 
+# Sync after pulling changes
+uv sync
+```
 
-class LLM:  
-    def __init__(self, model_name='gpt-4', verbose=False):  
-        # Initialize the LLM API client here  
-        pass  
-  
-    def __call__(self, messages):  
-        # Implement the API call to the LLM and return the response  
-        pass  
- 
-Ensure you handle API keys and environment variables appropriately.
+### Code Quality
+```bash
+# Format code
+uv add --dev black
+uv run black src/ tests/
 
-## Simulate Cyberattacks
- 
-Extend the environment builder to simulate cyberattacks:
+# Lint code
+uv add --dev ruff
+uv run ruff check src/ tests/
 
-Define attack patterns and behaviors.
-Generate logs that reflect malicious activities.
-Label data for supervised learning or reinforcement learning tasks.
-Add More Entity Types
- 
-You can add more entity types (e.g., network devices, applications) by:
+# Type checking
+uv add --dev mypy
+uv run mypy src/
+```
 
-Extending the create_entities method.
-Implementing new cases in generate_entity_attributes.
-Updating generate_log_details to include new entity interactions.
+### View Installed Packages
+```bash
+uv pip list
+```
 
+## 🎨 Customization
 
-## Troubleshooting
- 
-Confirm that you're running scripts from the project root directory.
-Verify that __init__.py files exist in src/, src/data_generation/, and tests/ directories.
+### Integrate LLMs for Realistic Data
 
-Import Errors in Tests
- 
-If the tests fail due to import errors:
+Add OpenAI for more realistic company profiles and entity attributes:
+```bash
+uv add openai python-dotenv
+```
 
-Check that the import statements match the package structure:
+Create a `.env` file:
+```bash
+OPENAI_API_KEY=your-api-key-here
+```
 
+Update `environment_builder.py`:
+```python
+import openai
+import os
+from dotenv import load_dotenv
 
-from data_generation.environment_builder import EnvironmentBuilder, HighLevelCompanyProfile  
- 
+load_dotenv()
 
-Ensure that the tests directory contains an __init__.py file.
+class LLM:
+    def __init__(self, model_name='gpt-4', verbose=False):
+        self.client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        self.model_name = model_name
+        self.verbose = verbose
+    
+    def __call__(self, messages):
+        response = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=messages
+        )
+        return response.choices[0].message.content
+```
 
- 
-## Contributing
- 
-Contributions are welcome!
+### Add Custom Attack Techniques
+
+1. Create a new module in `src/attack_simulation/components/`
+2. Implement the attack logic following MITRE ATT&CK
+3. Register it in the scenario configuration YAML
+
+### Extend Entity Types
+
+Add new entity types (network devices, applications, etc.):
+
+1. Extend `create_entities()` in `environment_builder.py`
+2. Implement attribute generation in `generate_entity_attributes()`
+3. Update `generate_log_details()` for new entity interactions
+
+## 🐛 Troubleshooting
+
+### Command not found: uv
+
+Ensure uv is in your PATH:
+```bash
+source $HOME/.cargo/env
+```
+Or restart your terminal.
+
+### Dependencies out of sync
+
+After pulling changes:
+```bash
+uv sync
+```
+
+### Import errors
+
+Always use `uv run` from the project root:
+```bash
+uv run python src/generate_data.py
+```
+
+Verify `__init__.py` files exist in:
+- `src/`
+- `src/data_generation/`
+- `tests/`
+
+### Clean install
+
+If you encounter persistent issues:
+```bash
+rm -rf .venv uv.lock
+uv sync
+```
+
+### Python version issues
+
+Check version:
+```bash
+uv run python --version
+```
+
+Pin specific version:
+```bash
+uv python pin 3.12
+uv sync
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork the repository**
+2. **Create a feature branch**
+```bash
+   git checkout -b feature/amazing-feature
+```
+3. **Make your changes**
+4. **Run tests and formatting**
+```bash
+   uv run pytest
+   uv run black src/ tests/
+   uv run ruff check src/ tests/
+```
+5. **Commit with descriptive message**
+```bash
+   git commit -m "Add amazing feature"
+```
+6. **Push and create Pull Request**
+```bash
+   git push origin feature/amazing-feature
+```
+
+### Development Setup
+```bash
+git clone <repository-url>
+cd Alphahunt
+uv sync
+uv add --dev pytest black ruff mypy ipython
+```
+
+### Commit Checklist
+
+- [ ] Tests pass: `uv run pytest`
+- [ ] Code formatted: `uv run black src/ tests/`
+- [ ] Linting clean: `uv run ruff check src/ tests/`
+- [ ] Dependencies locked: `uv lock` (commit `uv.lock`)
+- [ ] Documentation updated
+
+## 📚 Resources
+
+- [MITRE ATT&CK Framework](https://attack.mitre.org/)
+- [Microsoft Defender XDR Schema](https://learn.microsoft.com/en-us/microsoft-365/security/)
+- [uv Documentation](https://github.com/astral-sh/uv)
