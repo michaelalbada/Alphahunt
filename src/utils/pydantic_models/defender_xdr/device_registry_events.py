@@ -1,0 +1,53 @@
+from typing import Optional
+from datetime import datetime
+from pydantic import BaseModel
+
+class DeviceRegistryEvents(BaseModel):
+    """
+    Pydantic model for Microsoft Defender XDR DeviceRegistryEvents table.
+    Schema reference: https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceregistryevents-table
+    """
+    Timestamp: Optional[datetime]
+    DeviceId: Optional[str]
+    DeviceName: Optional[str]
+    ActionType: Optional[str]
+    RegistryKey: Optional[str]
+    RegistryValueType: Optional[str]
+    RegistryValueName: Optional[str]
+    RegistryValueData: Optional[str]
+    PreviousRegistryKey: Optional[str]
+    PreviousRegistryValueName: Optional[str]
+    PreviousRegistryValueData: Optional[str]
+    InitiatingProcessAccountDomain: Optional[str]
+    InitiatingProcessAccountName: Optional[str]
+    InitiatingProcessAccountSid: Optional[str]
+    InitiatingProcessAccountUpn: Optional[str]
+    InitiatingProcessAccountObjectId: Optional[str]
+    InitiatingProcessSHA1: Optional[str]
+    InitiatingProcessSHA256: Optional[str]
+    InitiatingProcessMD5: Optional[str]
+    InitiatingProcessFileName: Optional[str]
+    InitiatingProcessFileSize: Optional[int]
+    InitiatingProcessVersionInfoCompanyName: Optional[str]
+    InitiatingProcessVersionInfoProductName: Optional[str]
+    InitiatingProcessVersionInfoProductVersion: Optional[str]
+    InitiatingProcessVersionInfoInternalFileName: Optional[str]
+    InitiatingProcessVersionInfoOriginalFileName: Optional[str]
+    InitiatingProcessVersionInfoFileDescription: Optional[str]
+    InitiatingProcessId: Optional[int]
+    InitiatingProcessCommandLine: Optional[str]
+    InitiatingProcessCreationTime: Optional[datetime]
+    InitiatingProcessFolderPath: Optional[str]
+    InitiatingProcessParentId: Optional[int]
+    InitiatingProcessParentFileName: Optional[str]
+    InitiatingProcessParentCreationTime: Optional[datetime]
+    InitiatingProcessIntegrityLevel: Optional[str]
+    InitiatingProcessTokenElevation: Optional[str]
+    ReportId: Optional[int]
+    AppGuardContainerId: Optional[str]
+    InitiatingProcessSessionId: Optional[int]
+    IsInitiatingProcessRemoteSession: Optional[bool]
+    InitiatingProcessRemoteSessionDeviceName: Optional[str]
+    InitiatingProcessRemoteSessionIP: Optional[str]
+    ProcessUniqueId: Optional[str]
+    InitiatingProcessUniqueId: Optional[str] 

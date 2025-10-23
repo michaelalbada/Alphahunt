@@ -1,0 +1,39 @@
+# QA Question YAML Template
+# ------------------------
+# - Each entry represents a single question.
+# - 'id' should be a simple, descriptive string (e.g., 'most_common_registry_key').
+# - 'tables' is a list of relevant output tables for the question.
+# - 'question' is the full question text.
+# - 'mitre_technique' is an optional field for MITRE ATT&CK technique ID (e.g., T1547).
+# - 'difficulty' must be one of: easy, medium, hard.
+# - 'metadata' is optional and can include tags or other info.
+# - You may add other fields as needed (e.g., description, answer_type).
+
+- id: persistence_established
+  question: "Was persistence established via registry run keys?"
+  mitre_technique: T1547
+  difficulty: medium
+  tables:
+    - device_registry_events
+  metadata:
+    tags: [persistence, registry]
+
+- id: most_common_registry_key
+  question: "Which registry key was most commonly used for persistence?"
+  mitre_technique: T1547
+  difficulty: hard
+  tables:
+    - device_registry_events
+  metadata:
+    tags: [persistence, registry]
+
+- id: unique_devices_modified
+  question: "How many unique devices modified registry run keys during the attack?"
+  mitre_technique: T1547
+  difficulty: medium
+  tables:
+    - device_registry_events
+  metadata:
+    tags: [persistence, device, registry]
+
+# Add more questions as needed, following this pattern. 
