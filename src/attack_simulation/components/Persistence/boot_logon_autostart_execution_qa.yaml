@@ -1,0 +1,66 @@
+- id: persistence_established
+  question: Was persistence established via registry run keys?
+  mitre_technique: T1547
+  difficulty: medium
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - registry
+- id: most_common_registry_key
+  question: Which registry key was most commonly used for persistence?
+  mitre_technique: T1547
+  difficulty: hard
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - registry
+- id: unique_devices_modified
+  question: How many unique devices modified registry run keys during the attack?
+  mitre_technique: T1547
+  difficulty: medium
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - device
+    - registry
+- id: most_common_process
+  question: What was the most common process used to modify registry run keys?
+  mitre_technique: T1547
+  difficulty: medium
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - process
+    - registry
+- id: most_active_user
+  question: Which user account performed the most registry modifications during the
+    attack?
+  mitre_technique: T1547
+  difficulty: hard
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - account
+    - registry
+- id: registry_modification_timeframe
+  question: What was the time frame between the first and last registry modification
+    during the attack?
+  mitre_technique: T1547
+  difficulty: easy
+  tables:
+    - device_registry_events
+  metadata:
+    tags:
+    - persistence
+    - time
+    - registry
